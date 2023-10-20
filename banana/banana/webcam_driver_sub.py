@@ -11,11 +11,15 @@ class ImageSubscriber(Node):
 
     def __init__(self):
         super().__init__('webcam_subscriber') 
-        self.subscriber_ = self.create_subscription(Image, '/webcam/image_raw', self.subscriber_image, 10)
+        self.subscriber_ = self.create_subscription(
+                Image, '/webcam/image_raw', self.subscriber_image, 10)
         self.subscriber_
+
+        self.pub_ = self.create_publisher(Image, '/webcam/image_raw_second', 10)
         
-    def subscriber_image(self, ros2_image):
+    def subscriber_image(self, msg: Image):
         self.get_logger().info("Image Received")
+        self.pub_.publish(msg)
 
 def main(args=None):
     rclpy.init(args=args)
