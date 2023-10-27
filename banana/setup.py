@@ -20,8 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "webcam_driver_pub = banana.webcam_driver_pub:main",
-            "webcam_driver_sub = banana.webcam_driver_sub:main"
+            "webcam_driver_pub = banana.webcam_driver_pub:main"
+            #"webcam_driver_sub = banana.webcam_driver_sub:main"
         ],
     },
 )
