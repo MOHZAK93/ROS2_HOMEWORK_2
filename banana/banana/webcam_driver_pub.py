@@ -14,20 +14,24 @@ class ImagePublisher(Node):
     """"A node that published webcam images to a subscriber"""
 
     def __init__(self):
+        """Initialize node"""
         super().__init__('webcam_publisher')
         
         # Create publisher
         self.publisher_ = self.create_publisher(Image, '/webcam/image_raw', 10)
-        self.timer = self.create_timer(2, self.publish_image)
+
+        # Create timer
+        self.timer = self.create_timer(0.1, self.publish_image)
+
         # Initializw CvBridge to convert between OpenCV images and ROS2 images 
         self.bridge = CvBridge()
 
         # Activate webcam
         self.cap = cv.VideoCapture(0)
         
-        # Create text to be embeded on image
-
     def publish_image(self):
+        """Node publisher method"""
+
         unix_time = str(time())
         if self.cap.isOpened():
             ret, frame = self.cap.read()
@@ -49,6 +53,8 @@ class ImagePublisher(Node):
             self.get_logger().info("Image published")
 
 def main(args=None):
+    """Entry point"""
+
     rclpy.init(args=args)
 
     node = ImagePublisher()
