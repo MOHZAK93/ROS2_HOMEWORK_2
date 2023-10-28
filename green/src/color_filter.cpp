@@ -6,18 +6,24 @@
 #include "sensor_msgs/msg/image.hpp"
 using std::placeholders::_1;
 
+/**
+ * WebcamSubscriber - ROS2 image subscriber class
+ *
+ */
+
 class WebcamSubscriber : public rclcpp::Node
 {
   public:
     WebcamSubscriber()
     : Node("Webcam_Subscriber")
     {
+		// Create Subscriber
 		subscription_ = this->create_subscription<sensor_msgs::msg::Image>(
-				"/webcam/image_raw", 10, std::bind(&WebcamSubscriber::topic_callback, this, _1));
+				"/webcam/image_raw", 10, std::bind(&WebcamSubscriber::image_processor, this, _1));
     }
 
   private:
-    void topic_callback(const sensor_msgs::msg::Image::SharedPtr msg)
+    void image_processor(const sensor_msgs::msg::Image::SharedPtr msg)
     {
 		//Create CvBridge
 		cv_bridge::CvImagePtr cv_ptr;
@@ -27,11 +33,15 @@ class WebcamSubscriber : public rclcpp::Node
 
 		cv::Mat cv_image = cv_ptr->image;
 		
-		//Change color of image
+		//Change color of white objects to red in image
 		for (int i = 0; i < cv_image.rows; i++) {
 			for (int j =0; j < cv_image.cols; j++) {
 				cv::Vec3b& pixel = cv_image.at<cv::Vec3b>(i, j);
-				pixel[2] = cv::saturate_cast<uchar>(pixel[2] * 1.5);
+				if (pixel[0] > 220 && pixel[1] > 220 && pixel[2] > 220){
+					pixel[0] = 0;
+					pixel[1] = 0;
+					pixel[2] = 255;
+				}
 			}
 		}
 		
