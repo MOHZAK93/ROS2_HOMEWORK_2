@@ -11,9 +11,14 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(cv_bridge REQUIRED)
+find_package(image_transport REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-add_executable(color_filter src/color_filter.cpp)
+add_executable(color_filter
+	src/main.cpp
+	src/color_filter.cpp
+)
+
 ament_target_dependencies(color_filter
 	"rclcpp"
 	"sensor_msgs"
@@ -22,11 +27,9 @@ ament_target_dependencies(color_filter
 
 #Install launch files
 install(DIRECTORY
+	color_filter
 	launch
 	DESTINATION	share/${PROJECT_NAME}/
 )
-install(TARGETS
-	color_filter
-	DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
