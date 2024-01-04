@@ -26,10 +26,14 @@ ament_target_dependencies(color_filter
 )
 
 #Install launch files
-install(DIRECTORY
+install(TARGETS
 	color_filter
+	DESTINATION	lib/${PROJECT_NAME}/
+)
+
+install(DIRECTORY
 	launch
-	DESTINATION	share/${PROJECT_NAME}/
+	DESTINATION	share/${PROJECT_NAME}/	
 )
 
 ament_package()

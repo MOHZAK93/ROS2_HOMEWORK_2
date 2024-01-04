@@ -2,7 +2,6 @@
 
 """Webcam Image Publisher Node"""
 
-import rclpy
 from rclpy.node import Node
 import cv2 as cv
 from sensor_msgs.msg import Image
@@ -51,20 +50,3 @@ class ImagePublisher(Node):
                 # Publish image
                 self.publisher_.publish(ros2_image)
             self.get_logger().info("Image published")
-
-def main(args=None):
-    """Entry point"""
-
-    rclpy.init(args=args)
-
-    node = ImagePublisher()
-    
-    try:
-        rclpy.spin(node)
-    except KeyboardInterrupt:
-        node.capture.release()
-        rclpy.shutdown()
-
-
-if __name__ == '__main__':
-    main()
